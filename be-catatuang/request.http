@@ -1,0 +1,140 @@
+@baseUrl = https://catatuang-production.ikhsanheriyawan2404.workers.dev
+@contentType = application/json
+
+### ============================================================
+### HEALTH
+### ============================================================
+
+### 0. HEALTH CHECK
+GET {{baseUrl}}/health
+
+### ============================================================
+### AUTH
+### ============================================================
+
+### 1. REGISTER USER BARU
+# @name register
+POST {{baseUrl}}/auth/register
+Content-Type: {{contentType}}
+
+{
+  "email": "ikhsan@example.com",
+  "password": "SuperSecurePassword123!",
+  "name": "Ikhsan"
+}
+
+### 2. LOGIN USER
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: {{contentType}}
+
+{
+  "email": "budi@gmail.com",
+  "password": "password123"
+}
+
+### Variable otomatis dari response login
+@authToken = {{login.response.body.data.accessToken}}
+@refreshToken = {{login.response.body.data.refreshToken}}
+
+### 3. REFRESH TOKEN
+POST {{baseUrl}}/auth/refresh
+Content-Type: {{contentType}}
+
+{
+  "refreshToken": "{{refreshToken}}"
+}
+
+### 4. GET PROFILE (ME)
+GET {{baseUrl}}/auth/me
+Authorization: Bearer {{authToken}}
+
+### 5. LOGOUT USER
+POST {{baseUrl}}/auth/logout
+Content-Type: {{contentType}}
+
+{
+  "refreshToken": "{{refreshToken}}"
+}
+
+### ============================================================
+### DASHBOARD
+### ============================================================
+
+### 6. RINGKASAN BULAN INI
+GET {{baseUrl}}/dashboard/summary
+Authorization: Bearer {{authToken}}
+
+### ============================================================
+### TRANSACTIONS
+### ============================================================
+
+### 7. LIST SEMUA TRANSAKSI
+GET {{baseUrl}}/transactions
+Authorization: Bearer {{authToken}}
+
+### 8. LIST TRANSAKSI — FILTER BULAN
+GET {{baseUrl}}/transactions?month=2026-06
+Authorization: Bearer {{authToken}}
+
+### 9. LIST TRANSAKSI — FILTER BULAN + PENCARIAN
+GET {{baseUrl}}/transactions?month=2026-06&q=gaji
+Authorization: Bearer {{authToken}}
+
+### 10. LIST TRANSAKSI — FILTER TYPE
+GET {{baseUrl}}/transactions?type=masuk
+Authorization: Bearer {{authToken}}
+
+### 11. CATAT TRANSAKSI MASUK
+# @name createTransaction
+POST {{baseUrl}}/transactions
+Authorization: Bearer {{authToken}}
+Content-Type: {{contentType}}
+
+{
+  "type": "masuk",
+  "amount": 5000000,
+  "description": "Gaji bulanan",
+  "date": "2026-06-01"
+}
+
+### 12. CATAT TRANSAKSI KELUAR
+POST {{baseUrl}}/transactions
+Authorization: Bearer {{authToken}}
+Content-Type: {{contentType}}
+
+{
+  "type": "keluar",
+  "amount": 150000,
+  "description": "Makan siang",
+  "date": "2026-06-02"
+}
+
+### Variable dari response create
+@transactionId = {{createTransaction.response.body.data.id}}
+
+### 13. EDIT TRANSAKSI
+PATCH {{baseUrl}}/transactions/{{transactionId}}
+Authorization: Bearer {{authToken}}
+Content-Type: {{contentType}}
+
+{
+  "amount": 5500000,
+  "description": "Gaji bulanan (revisi)"
+}
+
+### 14. HAPUS TRANSAKSI
+DELETE {{baseUrl}}/transactions/{{transactionId}}
+Authorization: Bearer {{authToken}}
+
+### ============================================================
+### CHARTS
+### ============================================================
+
+### 15. DATA CHART — 6 BULAN TERAKHIR (default)
+GET {{baseUrl}}/transactions/summary/monthly
+Authorization: Bearer {{authToken}}
+
+### 16. DATA CHART — 3 BULAN TERAKHIR
+GET {{baseUrl}}/transactions/summary/monthly?last=3
+Authorization: Bearer {{authToken}}

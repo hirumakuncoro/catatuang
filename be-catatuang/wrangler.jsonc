@@ -1,0 +1,82 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "catatuang",
+	"main": "src/server.ts",
+	"compatibility_date": "2026-06-25",
+	"compatibility_flags": [
+		"nodejs_compat"
+	],
+  "observability": {
+    "logs": {
+      "enabled": true,
+      "invocation_logs": true
+    }
+  },
+	"vars": {
+		"DB_DRIVER": "d1",
+		"STORAGE_DRIVER": "minio",
+		"STORAGE_PUBLIC_URL": "http://localhost/global",
+		"MINIO_ENDPOINT": "http://localhost",
+		"MINIO_BUCKET": "global",
+	},
+	"env": {
+		"development": {
+			"vars": {
+				"DB_DRIVER": "d1",
+				"STORAGE_DRIVER": "minio",
+				"STORAGE_PUBLIC_URL": "http://localhost:9000/global",
+				"MINIO_ENDPOINT": "http://localhost:9000",
+				"MINIO_BUCKET": "global"
+			},
+      "kv_namespaces": [
+        {
+          "binding": "STORE",
+          "id": "3f50b1b9d9f7423080c327075dfb6f01"
+        }
+      ],
+      "r2_buckets": [
+        {
+          "binding": "BUCKET",
+          "bucket_name": "global-bucket"
+        }
+      ],
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "my-database",
+          "database_id": "0207710d-f014-41b7-a59b-fef382ecb241",
+          "migrations_dir": "drizzle/migrations"
+        }
+      ]
+		},
+		"production": {
+			"vars": {
+				"DB_DRIVER": "d1",
+				"STORAGE_DRIVER": "r2",
+				"STORAGE_PUBLIC_URL": "http://localhost/global",
+				"MINIO_ENDPOINT": "http://localhost",
+				"MINIO_BUCKET": "global"
+			},
+      "kv_namespaces": [
+        {
+          "binding": "STORE",
+          "id": "3f50b1b9d9f7423080c327075dfb6f01"
+        }
+      ],
+      "r2_buckets": [
+        {
+          "binding": "BUCKET",
+          "bucket_name": "global-bucket"
+        }
+      ],
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "my-database",
+          "database_id": "0207710d-f014-41b7-a59b-fef382ecb241",
+          "migrations_dir": "drizzle/migrations"
+        }
+      ],
+		}
+	},
+}

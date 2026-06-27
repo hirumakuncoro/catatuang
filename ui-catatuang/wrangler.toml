@@ -1,0 +1,6 @@
+name = "catatuang"
+compatibility_date = "2026-06-27"
+pages_build_output_dir = "./dist"
+
+[vars]
+VITE_API_URL = "https://catatuang-production.ikhsanheriyawan2404.workers.dev"

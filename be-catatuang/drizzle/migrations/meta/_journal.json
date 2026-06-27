@@ -1,0 +1,20 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1782550644854,
+      "tag": "0000_bouncy_doctor_spectrum",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1782553086618,
+      "tag": "0001_bent_vanisher",
+      "breakpoints": true
+    }
+  ]
+}
